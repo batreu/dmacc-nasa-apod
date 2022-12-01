@@ -1,9 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
 import {getPictureOfTheDay} from "./api";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 function App() {
+  const [pod,setPod] = useState(null);
   //useEffect is a hook a new hook that can trigger an action replaces lifecycle hook
   //useState in order to save state in our app
 
@@ -15,26 +16,24 @@ function App() {
     const getImage = async () => {
       const response = await getPictureOfTheDay();
       console.log("Parsed response body:", response);
+
+      setPod(response);
     }
 
     getImage();
   }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {
+        pod ?
+            <div>
+              <h1>{pod.title}</h1>
+              <p>{pod.explanation}</p>
+              <img src={pod.hdurl} alt={pod.title} width={"400px"}/>
+            </div>
+            :
+            <h1>Loading...</h1>
+      }
     </div>
   );
 }
